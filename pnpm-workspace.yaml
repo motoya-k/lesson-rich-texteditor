@@ -1,3 +1,5 @@
 packages:
   - 'packages/motion/'
   - 'packages/prisma/'
+  - 'packages/api-graphql/'
+  - 'packages/api-rest/'
