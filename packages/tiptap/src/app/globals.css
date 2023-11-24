@@ -2,26 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.tiptap > * + * {
+  margin-top: 0.75em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  line-height: 1.1;
+}
+
+.tiptap code {
+  background-color: rgba(#616161, 0.1);
+  color: #616161;
+}
+
+.tiptap pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.tiptap pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+}
+
+.tiptap hr {
+  margin: 1rem 0;
+}
+
+.tiptap blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(#0d0d0d, 0.1);
 }
