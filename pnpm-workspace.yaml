@@ -1,5 +1,5 @@
 packages:
-  - 'packages/motion/'
+  - 'packages/demo/'
   - 'packages/prisma/'
   - 'packages/api-graphql/'
   - 'packages/api-rest/'

@@ -16,14 +16,22 @@ const typeDefs = /* GraphQL */ `
     documents: [Document!]!
     document(id: UUID!): Document
     documentsByAuthorId(author_id: UUID!): [Document!]!
+    documentTemplates: [DocumentTemplate!]!
+    documentTemplate(id: UUID!): DocumentTemplate
   }
   input DocumentInput {
     title: String!
     content: JSON!
     author_id: UUID!
   }
+  input UpdateDocumentInput {
+    id: UUID!
+    title: String!
+    content: JSON!
+  }
   type Mutation {
     createDocument(variables: DocumentInput): Document!
+    updateDocument(variables: UpdateDocumentInput): Document!
   }
   type User {
     id: UUID!
@@ -35,6 +43,15 @@ const typeDefs = /* GraphQL */ `
     title: String!
     author: User!
     content: JSON!
+    created_at: String!
+    updated_at: String!
+  }
+  type DocumentTemplate {
+    id: UUID!
+    title: String!
+    content: JSON!
+    created_at: String!
+    updated_at: String!
   }
 `;
 
@@ -61,10 +78,27 @@ function main() {
         async document(_, { id }) {
           return prisma.document.findUnique({ where: { id } });
         },
+        async documentTemplates() {
+          return prisma.documentTemplate.findMany();
+        },
+        async documentTemplate(_, { id }) {
+          return prisma.documentTemplate.findUnique({ where: { id } });
+        },
       },
       Mutation: {
-        createDocument(_, { variables }) {
-          return prisma.document.create({ data: variables });
+        async createDocument(_, { variables }) {
+          return await prisma.document.create({ data: variables });
+        },
+        async updateDocument(_, { variables }) {
+          return await prisma.document.update({
+            where: { id: variables.id },
+            data: variables,
+          });
+        },
+      },
+      Document: {
+        async author({ author_id }) {
+          return prisma.user.findUnique({ where: { id: author_id } });
         },
       },
       JSON: GraphQLJSON,
