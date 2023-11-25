@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Editor } from "novel";
+// import { Editor } from "novel";
 import { gql } from "urql";
 import Skeleton from "@mui/material/Skeleton";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -9,7 +9,8 @@ import TextField from "@mui/material/TextField";
 import SaveIcon from "@mui/icons-material/Save";
 
 import { useNote } from "./hooks/useNote";
-import { useGetNoteTemplateQuery } from "@/.generate/gql";
+// import { useGetNoteTemplateQuery } from "@/.generate/gql";
+import { RichEditor } from "@/components/RichEditor";
 
 gql`
   query GetNote($noteId: UUID!) {
@@ -79,20 +80,7 @@ export default function NotesPage() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
           />
-          <Editor
-            // completionApi="http://localhost:3000/api/completion"
-            defaultValue={content}
-            // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/extensions/index.tsx
-            extensions={[]}
-            // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/props.ts
-            // NOTE: Argument is typed as `Editor` and it's defined https://github.com/ueberdosis/tiptap/blob/2bea9d1513052a2fce1be69be93d6491f5b8b33d/packages/core/src/Editor.ts#L38
-            // onUpdate={handleUpdate}
-            // NOTE: A callback function that is called whenever the editor is updated, but only after the defined debounce duration.
-            onDebouncedUpdate={handleUpdate}
-            debounceDuration={1000}
-            // storageKey={noteId as string}
-            disableLocalStorage={true}
-          />
+          <RichEditor />
         </>
       ) : (
         <Skeleton variant="rectangular" width={"100%"} height={60} />
