@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Editor } from "novel";
+// import {Editor} from "@/components/Editor"
 import { gql } from "urql";
 import Skeleton from "@mui/material/Skeleton";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -93,6 +94,10 @@ export default function NotesPage() {
             // storageKey={noteId as string}
             disableLocalStorage={true}
           />
+          {/* <Editor
+            defaultValue={JSON.stringify(content)}
+            onUpdate={handleUpdate}
+          /> */}
         </>
       ) : (
         <Skeleton variant="rectangular" width={"100%"} height={60} />

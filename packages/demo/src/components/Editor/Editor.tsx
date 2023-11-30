@@ -1,6 +1,7 @@
 "use client";
 
 import ExampleTheme from "./theme";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -22,6 +23,7 @@ import { TRANSFORMERS } from "@lexical/markdown";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
+import { EditorState } from "lexical";
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -51,19 +53,40 @@ const editorConfig = {
   ],
 };
 
-export default function Editor({ editable = true }: { editable?: boolean }) {
+export default function Editor({
+  editable = true,
+  defaultValue = "",
+  onUpdate,
+}: {
+  editable?: boolean;
+  defaultValue?: string;
+  onUpdate: (editorState: EditorState) => void;
+}) {
+  const onChange = (editorState: EditorState) => {
+    editorState.read(() => {
+      const json = editorState.toJSON();
+      console.log(JSON.stringify(json));
+    });
+  };
   return (
-    <LexicalComposer initialConfig={{ ...editorConfig, editable: true }}>
+    <LexicalComposer
+      initialConfig={{
+        ...editorConfig,
+        editable: true,
+        editorState: defaultValue,
+      }}
+    >
       <div className="editor-container">
-        <ToolbarPlugin />
+        {/* <ToolbarPugin /> */}
         <div className="editor-inner">
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
+          <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
-          <TreeViewPlugin />
+          {/* <TreeViewPlugin /> */}
           <AutoFocusPlugin />
           <CodeHighlightPlugin />
           <ListPlugin />
