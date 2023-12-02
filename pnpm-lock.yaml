@@ -139,6 +139,12 @@ importers:
       novel:
         specifier: ^0.1.22
         version: 0.1.22(@babel/core@7.23.3)(react@18.0.0)(solid-js@1.8.6)(svelte@4.2.7)(vue@3.3.8)
+      prosemirror:
+        specifier: ^0.11.1
+        version: 0.11.1
+      prosemirror-state:
+        specifier: ^1.4.3
+        version: 1.4.3
       react:
         specifier: ^18
         version: 18.0.0
@@ -7983,6 +7989,11 @@ packages:
       prosemirror-model: 1.19.3
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.8.0
+    dev: false
+
+  /prosemirror@0.11.1:
+    resolution: {integrity: sha512-IZ35mmexuo3DNkMXs2A3bAm1jdlAJRVPor/bX1AWT+TdAR9fv6igUjRUFtQDCRUKwxH7ufwL1p6Um/MdgcbVIw==}
+    deprecated: This library has been split up into separate modules. This is the old monolithic package, which is no longer maintained. Use prosemirror-view, prosemirror-model, etc instead.
     dev: false
 
   /psl@1.9.0:

@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Editor } from "novel";
 // import {Editor} from "@/components/Editor"
@@ -11,6 +12,32 @@ import SaveIcon from "@mui/icons-material/Save";
 
 import { useNote } from "./hooks/useNote";
 import { useGetNoteTemplateQuery } from "@/.generate/gql";
+import { Selection, NodeSelection, SelectionRange } from "prosemirror-state";
+
+// class EmptySelection extends Selection {
+//   constructor($anchor: any, $head: any, ranges: SelectionRange[] = []) {
+//     super($anchor, $head, ranges);
+//   }
+
+//   eq(selection: Selection): boolean {
+//     return selection instanceof EmptySelection;
+//   }
+
+//   map(doc: any, mapping: any): Selection {
+//     return new EmptySelection(
+//       doc.resolve(mapping.map(this.anchor)),
+//       doc.resolve(mapping.map(this.head))
+//     );
+//   }
+
+//   content(): any {
+//     return null;
+//   }
+
+//   toJSON() {
+//     return { type: "empty" };
+//   }
+// }
 
 gql`
   query GetNote($noteId: UUID!) {
@@ -51,6 +78,14 @@ export default function NotesPage() {
       templateId: template as string,
     });
 
+  // useEffect(() => {
+  //   console.log("fetch bubbleMenu");
+  //   if (typeof document !== "undefined") {
+  //     const element = document.querySelector("#tippy-1");
+  //     console.log("element", { element });
+  //   }
+  // }, []);
+
   return (
     <>
       <Head>
@@ -81,6 +116,19 @@ export default function NotesPage() {
             value={title}
           />
           <Editor
+            className="width-full"
+            editorProps={{
+              editable: (state) => {
+                if (state.selection instanceof Selection) {
+                  state.selection.ranges = state.selection.ranges.map(
+                    (range) => {
+                      return new SelectionRange(range.$from, range.$from);
+                    }
+                  );
+                }
+                return false;
+              },
+            }}
             // completionApi="http://localhost:3000/api/completion"
             defaultValue={content}
             // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/extensions/index.tsx

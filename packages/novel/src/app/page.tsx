@@ -1,7 +1,7 @@
 "use client";
 
 import { Editor } from "novel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Editor as Editor$1 } from "@tiptap/core";
 // onUpdate?: (editor?: Editor$1) => void | Promise<void>;
@@ -14,10 +14,15 @@ export default function Home() {
 
     if (value) setContent(JSON.stringify(value?.state.toJSON(), null, 2));
   };
+
+
   return (
     <main>
       <div className="flex justify-center">
         <Editor
+          editorProps={{
+            editable: () => false,
+          }}
           completionApi="http://localhost:3000/api/completion"
           defaultValue="Once upon a time, there was a"
           // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/extensions/index.tsx
