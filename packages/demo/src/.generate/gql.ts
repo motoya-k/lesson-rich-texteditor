@@ -44,15 +44,29 @@ export type DocumentTemplate = {
   updated_at: Scalars['String']['output'];
 };
 
+export type FileUpload = {
+  __typename?: 'FileUpload';
+  contentType: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  filePath: Scalars['String']['output'];
+  uploadUrl: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createDocument: Document;
+  requestFileUpload: FileUpload;
   updateDocument: Document;
 };
 
 
 export type MutationCreateDocumentArgs = {
   variables: InputMaybe<DocumentInput>;
+};
+
+
+export type MutationRequestFileUploadArgs = {
+  variables: InputMaybe<RequestFileUploadInput>;
 };
 
 
@@ -92,6 +106,11 @@ export type QueryUserArgs = {
   id: Scalars['UUID']['input'];
 };
 
+export type RequestFileUploadInput = {
+  fileName: Scalars['String']['input'];
+  filePath: Scalars['String']['input'];
+};
+
 export type UpdateDocumentInput = {
   content: Scalars['JSON']['input'];
   id: Scalars['UUID']['input'];
@@ -109,6 +128,13 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string } | null };
+
+export type RequestFileUploadMutationVariables = Exact<{
+  fileUpload: RequestFileUploadInput;
+}>;
+
+
+export type RequestFileUploadMutation = { __typename?: 'Mutation', requestFileUpload: { __typename?: 'FileUpload', fileName: string, filePath: string, contentType: string, uploadUrl: string } };
 
 export type GetNoteQueryVariables = Exact<{
   noteId: Scalars['UUID']['input'];
@@ -162,6 +188,20 @@ export const GetCurrentUserDocument = gql`
 
 export function useGetCurrentUserQuery(options?: Omit<Urql.UseQueryArgs<GetCurrentUserQueryVariables>, 'query'>) {
   return Urql.useQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>({ query: GetCurrentUserDocument, ...options });
+};
+export const RequestFileUploadDocument = gql`
+    mutation RequestFileUpload($fileUpload: RequestFileUploadInput!) {
+  requestFileUpload(variables: $fileUpload) {
+    fileName
+    filePath
+    contentType
+    uploadUrl
+  }
+}
+    `;
+
+export function useRequestFileUploadMutation() {
+  return Urql.useMutation<RequestFileUploadMutation, RequestFileUploadMutationVariables>(RequestFileUploadDocument);
 };
 export const GetNoteDocument = gql`
     query GetNote($noteId: UUID!) {

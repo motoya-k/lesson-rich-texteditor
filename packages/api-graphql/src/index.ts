@@ -2,6 +2,8 @@ import { createYoga, createSchema } from "graphql-yoga";
 import { createServer } from "http";
 import { prisma } from "./client/prisma";
 import { GraphQLJSON, GraphQLUUID } from "graphql-scalars";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const PORT = 4040;
 
@@ -29,9 +31,14 @@ const typeDefs = /* GraphQL */ `
     title: String!
     content: JSON!
   }
+  input RequestFileUploadInput {
+    fileName: String!
+    filePath: String!
+  }
   type Mutation {
     createDocument(variables: DocumentInput): Document!
     updateDocument(variables: UpdateDocumentInput): Document!
+    requestFileUpload(variables: RequestFileUploadInput): FileUpload!
   }
   type User {
     id: UUID!
@@ -52,6 +59,13 @@ const typeDefs = /* GraphQL */ `
     content: JSON!
     created_at: String!
     updated_at: String!
+  }
+  type FileUpload {
+    # id: UUID!
+    fileName: String!
+    filePath: String!
+    contentType: String!
+    uploadUrl: String!
   }
 `;
 
@@ -94,6 +108,35 @@ function main() {
             where: { id: variables.id },
             data: variables,
           });
+        },
+        async requestFileUpload(_, { variables }) {
+          console.info("requestFileUpload start", { variables });
+          const bucket = "demo-bucket";
+          const s3Client = new S3Client({
+            region: "us-east-1",
+            endpoint: "http://127.0.0.1:9000",
+            credentials: {
+              accessKeyId: "minio",
+              secretAccessKey: "minio123",
+            },
+          });
+          // Get signed URL for the file upload from the S3 client
+          const contentType = "image/jpeg";
+          const filePath = `${variables.filePath}`;
+          const command = new PutObjectCommand({
+            Bucket: bucket,
+            Key: filePath,
+            ContentType: contentType,
+          });
+          const signedUrl = await getSignedUrl(s3Client, command, {
+            expiresIn: 3600,
+          });
+          return {
+            fileName: variables.fileName,
+            filePath,
+            contentType,
+            uploadUrl: signedUrl,
+          };
         },
       },
       Document: {

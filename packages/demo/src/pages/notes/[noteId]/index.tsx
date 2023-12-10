@@ -13,6 +13,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { useNote } from "./hooks/useNote";
 import { useGetNoteTemplateQuery } from "@/.generate/gql";
 import { Selection, NodeSelection, SelectionRange } from "prosemirror-state";
+import MySlashCommand from '@/extensions/slash-command'
 
 // class EmptySelection extends Selection {
 //   constructor($anchor: any, $head: any, ranges: SelectionRange[] = []) {
@@ -78,14 +79,6 @@ export default function NotesPage() {
       templateId: template as string,
     });
 
-  // useEffect(() => {
-  //   console.log("fetch bubbleMenu");
-  //   if (typeof document !== "undefined") {
-  //     const element = document.querySelector("#tippy-1");
-  //     console.log("element", { element });
-  //   }
-  // }, []);
-
   return (
     <>
       <Head>
@@ -118,21 +111,23 @@ export default function NotesPage() {
           <Editor
             className="width-full"
             editorProps={{
-              editable: (state) => {
-                if (state.selection instanceof Selection) {
-                  state.selection.ranges = state.selection.ranges.map(
-                    (range) => {
-                      return new SelectionRange(range.$from, range.$from);
-                    }
-                  );
-                }
-                return false;
-              },
+              // editable: (state) => {
+              //   if (state.selection instanceof Selection) {
+              //     state.selection.ranges = state.selection.ranges.map(
+              //       (range) => {
+              //         return new SelectionRange(range.$from, range.$from);
+              //       }
+              //     );
+              //   }
+              //   return false;
+              // },
             }}
             // completionApi="http://localhost:3000/api/completion"
             defaultValue={content}
             // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/extensions/index.tsx
-            extensions={[]}
+            extensions={[
+              // MySlashCommand,
+            ]}
             // NOTE: default values https://github.com/steven-tey/novel/blob/main/packages/core/src/ui/editor/props.ts
             // NOTE: Argument is typed as `Editor` and it's defined https://github.com/ueberdosis/tiptap/blob/2bea9d1513052a2fce1be69be93d6491f5b8b33d/packages/core/src/Editor.ts#L38
             // onUpdate={handleUpdate}

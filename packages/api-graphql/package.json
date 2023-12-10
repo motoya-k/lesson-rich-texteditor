@@ -17,6 +17,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.468.0",
+    "@aws-sdk/s3-request-presigner": "^3.468.0",
     "@graphql-tools/stitching-directives": "^3.0.0",
     "@graphql-yoga/plugin-disable-introspection": "^1.0.3",
     "@motion/prisma": "workspace:*",

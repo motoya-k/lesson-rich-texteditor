@@ -57,6 +57,7 @@ export const useNote = ({
 
   const handleUpdate = useCallback(
     async (editor?: Editor$1) => {
+      console.log('handleUpdate')
       setIsLoading(true);
       if (!editor) return;
       const _content = editor.getJSON();
@@ -72,7 +73,7 @@ export const useNote = ({
         setIsLoading(false);
       }, 1000);
     },
-    [content, title]
+    [noteId, title, updateNote]
   );
 
   const handleSave = useCallback(async () => {
@@ -88,7 +89,7 @@ export const useNote = ({
       setIsLoading(false);
       router.push('/notes')
     }, 1000);
-  }, [content, title]);
+  }, [content, noteId, router, title, updateNote]);
 
   return {
     content,
